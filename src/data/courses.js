@@ -6,7 +6,7 @@ const levelOrder = ["A1", "A2", "B1", "B2"];
 const nativeNames = {
   am: "Amharic",
   ti: "Tigrigna",
-  "fa-af": "Dari"
+  ar: "Arabic"
 };
 
 const targetNames = {
@@ -21,7 +21,7 @@ function pickTargetText(entry, targetCode) {
   }
 
   if (targetCode === "de") {
-    return germanById[entry.id] || entry.en;
+    return germanById[entry.id] || entry.de || entry.en;
   }
 
   return entry.en;
@@ -32,7 +32,7 @@ function pickNativeText(entry, nativeCode) {
     return entry.ti;
   }
 
-  if (nativeCode === "fa-af") {
+  if (nativeCode === "ar") {
     return entry.fa;
   }
 
@@ -66,7 +66,7 @@ function buildLessonsForLevel(nativeCode, targetCode, level) {
 
   const seenEntryIds = new Set();
   const uniqueEntries = entries.filter((entry) => {
-    const key = entry.id || `${entry.en}-${entry.am}-${entry.ti}-${entry.fa}`;
+    const key = entry.id || `${entry.en}-${entry.fr}-${entry.de || ""}-${entry.am}-${entry.ti}-${entry.fa}`;
     if (seenEntryIds.has(key)) {
       return false;
     }
@@ -147,28 +147,28 @@ export const courseCatalog = levelOrder.flatMap((level) => [
     lessons: buildLessonsForLevel("ti", "de", level)
   },
   {
-    id: `faaf-en-${level.toLowerCase()}`,
-    nativeCode: "fa-af",
+    id: `ar-en-${level.toLowerCase()}`,
+    nativeCode: "ar",
     targetCode: "en",
     level,
-    title: `${targetNames.en} for ${nativeNames["fa-af"]} Speakers`,
-    lessons: buildLessonsForLevel("fa-af", "en", level)
+    title: `${targetNames.en} for ${nativeNames.ar} Speakers`,
+    lessons: buildLessonsForLevel("ar", "en", level)
   },
   {
-    id: `faaf-fr-${level.toLowerCase()}`,
-    nativeCode: "fa-af",
+    id: `ar-fr-${level.toLowerCase()}`,
+    nativeCode: "ar",
     targetCode: "fr",
     level,
-    title: `${targetNames.fr} for ${nativeNames["fa-af"]} Speakers`,
-    lessons: buildLessonsForLevel("fa-af", "fr", level)
+    title: `${targetNames.fr} for ${nativeNames.ar} Speakers`,
+    lessons: buildLessonsForLevel("ar", "fr", level)
   },
   {
-    id: `faaf-de-${level.toLowerCase()}`,
-    nativeCode: "fa-af",
+    id: `ar-de-${level.toLowerCase()}`,
+    nativeCode: "ar",
     targetCode: "de",
     level,
-    title: `${targetNames.de} for ${nativeNames["fa-af"]} Speakers`,
-    lessons: buildLessonsForLevel("fa-af", "de", level)
+    title: `${targetNames.de} for ${nativeNames.ar} Speakers`,
+    lessons: buildLessonsForLevel("ar", "de", level)
   }
 ]);
 

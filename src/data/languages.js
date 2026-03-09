@@ -10,9 +10,9 @@ export const nativeLanguages = [
     nativeLabel: "ትግርኛ"
   },
   {
-    code: "fa-af",
-    label: "Afghanistan (Dari)",
-    nativeLabel: "دری"
+    code: "ar",
+    label: "Arabic",
+    nativeLabel: "العربية"
   }
 ];
 

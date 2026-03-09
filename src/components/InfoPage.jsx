@@ -4,7 +4,14 @@ import BrandHero from "./BrandHero";
 import TitleBar from "./TitleBar";
 import { useAppLanguage } from "../context/AppLanguageContext";
 
-function InfoPage({ title, description, primaryCtaLabel, primaryCtaPath = "/" }) {
+function InfoPage({
+  title,
+  description,
+  primaryCtaLabel,
+  primaryCtaPath = "/",
+  onPrimaryAction,
+  primaryCtaClassName = ""
+}) {
   const { t } = useAppLanguage();
 
   return (
@@ -24,9 +31,15 @@ function InfoPage({ title, description, primaryCtaLabel, primaryCtaPath = "/" })
         <h2>{title}</h2>
         <p className="subtext">{t("infoReady")}</p>
         <div className="title-links info-links">
-          <Link className="title-link" to={primaryCtaPath}>
-            {primaryCtaLabel}
-          </Link>
+          {onPrimaryAction ? (
+            <button type="button" className={`title-link title-link-button ${primaryCtaClassName}`.trim()} onClick={onPrimaryAction}>
+              {primaryCtaLabel}
+            </button>
+          ) : (
+            <Link className={`title-link ${primaryCtaClassName}`.trim()} to={primaryCtaPath}>
+              {primaryCtaLabel}
+            </Link>
+          )}
           <Link className="title-link" to="/">
             {t("backHome")}
           </Link>

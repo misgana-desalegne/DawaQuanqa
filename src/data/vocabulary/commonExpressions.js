@@ -1,4 +1,6 @@
-export const expressionsByLevel = {
+const MIN_ENTRIES_PER_LEVEL = 80;
+
+const baseExpressionsByLevel = {
   A1: [
     { id: "a1_hello", en: "Hello", fr: "Bonjour", am: "ሰላም", ti: "ሰላም", fa: "سلام" },
     { id: "a1_good_morning", en: "Good morning", fr: "Bonjour", am: "እንደምን አደሩ", ti: "ከመይ ሓዲርካ", fa: "صبح بخیر" },
@@ -71,6 +73,140 @@ export const expressionsByLevel = {
     { id: "b2_volunteer", en: "Volunteer program", fr: "Programme de benevolat", am: "የበጎ ፈቃድ ፕሮግራም", ti: "ፕሮግራም ተወፋይ", fa: "برنامه داوطلبی" },
     { id: "b2_support", en: "Thank you for your support", fr: "Merci pour votre soutien", am: "ለድጋፍዎ እናመሰግናለን", ti: "ንድጋፍኩም የቐንየለይ", fa: "از حمایت شما سپاسگزارم" }
   ]
+};
+
+const supplementConfigs = {
+  A1: {
+    subjects: [
+      { en: "I", fr: "Je", de: "Ich", am: "እኔ", ti: "ኣነ", fa: "من" },
+      { en: "You", fr: "Tu", de: "Du", am: "አንተ", ti: "ንስኻ", fa: "تو" },
+      { en: "We", fr: "Nous", de: "Wir", am: "እኛ", ti: "ንሕና", fa: "ما" },
+      { en: "They", fr: "Ils", de: "Sie", am: "እነሱ", ti: "ንሳቶም", fa: "آنها" }
+    ],
+    verbs: [
+      { en: "need", fr: "avons besoin de", de: "brauchen", am: "እፈልጋለሁ", ti: "የድልየኒ", fa: "نیاز دارم" },
+      { en: "have", fr: "ai", de: "habe", am: "አለኝ", ti: "ኣለኒ", fa: "دارم" },
+      { en: "see", fr: "vois", de: "sehe", am: "አያለሁ", ti: "እርኢ", fa: "می بینم" },
+      { en: "like", fr: "aime", de: "mag", am: "እወዳለሁ", ti: "እፈቱ", fa: "دوست دارم" }
+    ],
+    objects: [
+      { en: "water", fr: "de l'eau", de: "Wasser", am: "ውሃ", ti: "ማይ", fa: "آب" },
+      { en: "bread", fr: "du pain", de: "Brot", am: "ዳቦ", ti: "ባኒ", fa: "نان" },
+      { en: "a book", fr: "un livre", de: "ein Buch", am: "መጽሐፍ", ti: "መጽሓፍ", fa: "کتاب" },
+      { en: "the bus", fr: "le bus", de: "den Bus", am: "አውቶቡስ", ti: "ኣውቶቡስ", fa: "اتوبوس" }
+    ]
+  },
+  A2: {
+    subjects: [
+      { en: "I", fr: "Je", de: "Ich", am: "እኔ", ti: "ኣነ", fa: "من" },
+      { en: "We", fr: "Nous", de: "Wir", am: "እኛ", ti: "ንሕና", fa: "ما" },
+      { en: "My family", fr: "Ma famille", de: "Meine Familie", am: "ቤተሰቤ", ti: "ስድራይ", fa: "خانواده من" },
+      { en: "Our group", fr: "Notre groupe", de: "Unsere Gruppe", am: "ቡድናችን", ti: "ጉጅለና", fa: "گروه ما" }
+    ],
+    verbs: [
+      { en: "visit", fr: "visite", de: "besuche", am: "እጎበኛለሁ", ti: "እበጽሕ", fa: "بازدید می کنم" },
+      { en: "prepare", fr: "prepare", de: "bereite vor", am: "አዘጋጃለሁ", ti: "አዳልው", fa: "آماده می کنم" },
+      { en: "buy", fr: "achete", de: "kaufe", am: "እገዛለሁ", ti: "እዕድግ", fa: "می خرم" },
+      { en: "search for", fr: "cherche", de: "suche", am: "እፈልጋለሁ", ti: "እደሊ", fa: "جستجو می کنم" }
+    ],
+    objects: [
+      { en: "the market", fr: "le marche", de: "den Markt", am: "ገበያ", ti: "ዕዳጋ", fa: "بازار" },
+      { en: "the station", fr: "la gare", de: "den Bahnhof", am: "ጣቢያ", ti: "ጣብያ", fa: "ایستگاه" },
+      { en: "the hospital", fr: "l'hopital", de: "das Krankenhaus", am: "ሆስፒታል", ti: "ሆስፒታል", fa: "شفاخانه" },
+      { en: "the documents", fr: "les documents", de: "die Dokumente", am: "ሰነዶች", ti: "ሰነዳት", fa: "اسناد" }
+    ]
+  },
+  B1: {
+    subjects: [
+      { en: "I", fr: "Je", de: "Ich", am: "እኔ", ti: "ኣነ", fa: "من" },
+      { en: "Our team", fr: "Notre equipe", de: "Unser Team", am: "ቡድናችን", ti: "ጉጅለና", fa: "تیم ما" },
+      { en: "My colleague", fr: "Mon collegue", de: "Mein Kollege", am: "ባልደረባዬ", ti: "መሳርሕተይ", fa: "همکار من" },
+      { en: "The community", fr: "La communaute", de: "Die Gemeinschaft", am: "ማህበረሰቡ", ti: "ማሕበረሰብ", fa: "جامعه" }
+    ],
+    verbs: [
+      { en: "discusses", fr: "discute", de: "bespricht", am: "ይወያያል", ti: "ይዛተ", fa: "بحث می کند" },
+      { en: "organizes", fr: "organise", de: "organisiert", am: "ያዘጋጃል", ti: "የዳሉ", fa: "سازماندهی می کند" },
+      { en: "improves", fr: "ameliore", de: "verbessert", am: "ያሻሽላል", ti: "የመሓይሽ", fa: "بهبود می دهد" },
+      { en: "supports", fr: "soutient", de: "unterstuetzt", am: "ይደግፋል", ti: "ይድግፍ", fa: "حمایت می کند" }
+    ],
+    objects: [
+      { en: "the project plan", fr: "le plan du projet", de: "den Projektplan", am: "የፕሮጀክት እቅድ", ti: "መደብ ፕሮጀክት", fa: "طرح پروژه" },
+      { en: "the meeting", fr: "la reunion", de: "die Besprechung", am: "ስብሰባ", ti: "ኣኼባ", fa: "جلسه" },
+      { en: "the application", fr: "la demande", de: "den Antrag", am: "ማመልከቻ", ti: "ምልክታ", fa: "درخواست" },
+      { en: "the training program", fr: "le programme de formation", de: "das Trainingsprogramm", am: "የስልጠና ፕሮግራም", ti: "ፕሮግራም ስልጠና", fa: "برنامه آموزشی" }
+    ]
+  },
+  B2: {
+    subjects: [
+      { en: "I", fr: "Je", de: "Ich", am: "እኔ", ti: "ኣነ", fa: "من" },
+      { en: "Our organization", fr: "Notre organisation", de: "Unsere Organisation", am: "ድርጅታችን", ti: "ውድብና", fa: "سازمان ما" },
+      { en: "The city office", fr: "Le bureau municipal", de: "Das Stadtbuero", am: "የከተማ ቢሮ", ti: "ቤት ጽሕፈት ከተማ", fa: "دفتر شهری" },
+      { en: "The policy group", fr: "Le groupe politique", de: "Die Politikgruppe", am: "የፖሊሲ ቡድን", ti: "ጉጅለ ፖሊሲ", fa: "گروه پالیسی" }
+    ],
+    verbs: [
+      { en: "evaluates", fr: "evalue", de: "bewertet", am: "ይገምግማል", ti: "ይገምግም", fa: "ارزیابی می کند" },
+      { en: "coordinates", fr: "coordonne", de: "koordiniert", am: "ያስተባብራል", ti: "ይወሃህድ", fa: "هماهنگ می کند" },
+      { en: "reviews", fr: "examine", de: "prueft", am: "ይመርምራል", ti: "ይምርምር", fa: "بازبینی می کند" },
+      { en: "implements", fr: "met en oeuvre", de: "setzt um", am: "ይተግብራል", ti: "ይፍጽም", fa: "اجرا می کند" }
+    ],
+    objects: [
+      { en: "the long-term strategy", fr: "la strategie a long terme", de: "die Langzeitstrategie", am: "የረጅም ጊዜ ስትራቴጂ", ti: "ስትራተጂ ነዊሕ ግዜ", fa: "استراتژی درازمدت" },
+      { en: "the public service process", fr: "le processus de service public", de: "den oeffentlichen Dienstprozess", am: "የህዝብ አገልግሎት ሂደት", ti: "ሂደት ኣገልግሎት ህዝቢ", fa: "روند خدمات عمومی" },
+      { en: "the financial plan", fr: "le plan financier", de: "den Finanzplan", am: "የገንዘብ እቅድ", ti: "መደብ ፋይናንስ", fa: "برنامه مالی" },
+      { en: "the community program", fr: "le programme communautaire", de: "das Gemeinschaftsprogramm", am: "የማህበረሰብ ፕሮግራም", ti: "ፕሮግራም ማሕበረሰብ", fa: "برنامه اجتماعی" }
+    ]
+  }
+};
+
+function composeSentence(subject, verb, object, lang) {
+  if (lang === "am" || lang === "ti" || lang === "fa") {
+    return `${subject[lang]} ${object[lang]} ${verb[lang]}`;
+  }
+
+  return `${subject[lang]} ${verb[lang]} ${object[lang]}`;
+}
+
+function buildSupplementEntries(level) {
+  const config = supplementConfigs[level];
+  const entries = [];
+  let counter = 1;
+
+  for (const subject of config.subjects) {
+    for (const verb of config.verbs) {
+      for (const object of config.objects) {
+        entries.push({
+          id: `${level.toLowerCase()}_supp_${counter}`,
+          en: composeSentence(subject, verb, object, "en"),
+          fr: composeSentence(subject, verb, object, "fr"),
+          de: composeSentence(subject, verb, object, "de"),
+          am: composeSentence(subject, verb, object, "am"),
+          ti: composeSentence(subject, verb, object, "ti"),
+          fa: composeSentence(subject, verb, object, "fa")
+        });
+        counter += 1;
+      }
+    }
+  }
+
+  return entries;
+}
+
+function withMinimumEntries(level) {
+  const baseEntries = [...(baseExpressionsByLevel[level] || [])];
+  if (baseEntries.length >= MIN_ENTRIES_PER_LEVEL) {
+    return baseEntries;
+  }
+
+  const supplementEntries = buildSupplementEntries(level);
+  const needed = MIN_ENTRIES_PER_LEVEL - baseEntries.length;
+  return [...baseEntries, ...supplementEntries.slice(0, needed)];
+}
+
+export const expressionsByLevel = {
+  A1: withMinimumEntries("A1"),
+  A2: withMinimumEntries("A2"),
+  B1: withMinimumEntries("B1"),
+  B2: withMinimumEntries("B2")
 };
 
 export const levelSectionTitles = {

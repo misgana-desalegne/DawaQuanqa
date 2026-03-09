@@ -5,6 +5,7 @@ import ChipSelector from "../components/ChipSelector";
 import TitleBar from "../components/TitleBar";
 import { useAppLanguage } from "../context/AppLanguageContext";
 import { cefrLevels, nativeLanguages, teachingLanguages } from "../data/languages";
+import { startStripeDonation } from "../lib/donation";
 
 function LandingPage() {
   const { t } = useAppLanguage();
@@ -67,20 +68,7 @@ function LandingPage() {
     { label: t("navSignup"), key: "signup", type: "popup" },
     { label: t("navLogin"), key: "login", type: "popup" },
     { label: t("navAbout"), key: "about", type: "route", to: "/about" },
-    { label: t("navDonate"), key: "donate", type: "popup" }
-  ];
-
-  const hornHighlights = [
-    {
-      title: "Ethiopia Focus",
-      detail: "Amharic-first route with local expressions and familiar context.",
-      badge: "ETH"
-    },
-    {
-      title: "Eritrea Focus",
-      detail: "Tigrigna-native path built for everyday communication goals.",
-      badge: "ERI"
-    }
+    { label: t("navDonate"), key: "donate", type: "action" }
   ];
 
   const popupContent = {
@@ -94,11 +82,6 @@ function LandingPage() {
       description: t("popupLoginBody"),
       action: t("loginAction")
     },
-    donate: {
-      title: t("popupDonateTitle"),
-      description: t("popupDonateBody"),
-      action: t("donateAction")
-    }
   };
 
   return (
@@ -113,8 +96,8 @@ function LandingPage() {
               <button
                 key={link.key}
                 type="button"
-                className="title-link title-link-button"
-                onClick={() => setActivePopup(link.key)}
+                className={`title-link title-link-button ${link.key === "donate" ? "donate-cta" : ""}`.trim()}
+                onClick={() => (link.key === "donate" ? void startStripeDonation() : setActivePopup(link.key))}
                 aria-label={link.label}
               >
                 {link.label}
@@ -203,13 +186,11 @@ function LandingPage() {
               </form>
             )}
 
-            {activePopup === "donate" && (
-              <div className="donate-note">
-                <p>{t("popupDonateNote")}</p>
-              </div>
-            )}
-
-            <button type="button" className="primary popup-action-btn" onClick={() => setActivePopup(null)}>
+            <button
+              type="button"
+              className="primary popup-action-btn"
+              onClick={() => setActivePopup(null)}
+            >
               {popupContent[activePopup].action}
             </button>
           </section>
